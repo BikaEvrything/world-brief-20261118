@@ -131,11 +131,18 @@ def write_output(data: bytes, destination: Path) -> None:
         parent.mkdir(parents=True, exist_ok=True)
     # atomic write: temp file in the destination directory, then replace
     fd, tmp_name = tempfile.mkstemp(dir=str(parent), prefix=".entry-", suffix=".png")
+    # mkstemp defaults to 0600; the final artifact must be world-readable (0644)
+    # so a distinct-uid reader can open it. The chmod deliberately runs inside
+    # the try and the fdopen context, after write/flush/fsync and before the
+    # file closes and os.replace runs: a chmod failure follows the existing
+    # cleanup path, and the temp file is never world-readable while its bytes
+    # are still being written.
     try:
         with os.fdopen(fd, "wb") as handle:
             handle.write(data)
             handle.flush()
             os.fsync(handle.fileno())
+            os.fchmod(fd, 0o644)
         os.replace(tmp_name, destination)
     except BaseException:
         try:
