@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>World Brief — Daily Signals · 18 November 2026</title>
+<style>
+  :root{
+    --ivory:#f8f3e7;
+    --card:#fffdf6;
+    --navy:#1d2b4a;
+    --navy-deep:#16233d;
+    --coral:#e06a4b;
+    --teal:#2e7d74;
+    --gold:#c9a24b;
+    --gold-soft:#d9b25f;
+    --rust:#b0513a;
+    --seafoam:#cfe3da;
+    --line:rgba(29,43,74,.28);
+    --line-fine:rgba(29,43,74,.18);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{background:#e9e4d6;}
+  body{font-family:"Helvetica Neue",Arial,"DejaVu Sans",sans-serif;color:var(--navy);}
+  .serif{font-family:Georgia,"Times New Roman","DejaVu Serif",serif;}
+
+  .page{
+    position:relative;
+    width:1024px;height:960px;
+    background:
+      radial-gradient(1200px 700px at 85% -10%, #fdfaf1 0%, rgba(253,250,241,0) 60%),
+      var(--ivory);
+    overflow:hidden;
+    padding:24px 34px 20px 34px;
+    display:flex;flex-direction:column;
+  }
+  .page::after{ /* faint paper grain vignette */
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(1400px 900px at 50% 40%, rgba(0,0,0,0) 70%, rgba(60,45,20,.05) 100%);
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{border-top:1.5px solid var(--navy);border-bottom:1px solid var(--line-fine);
+    padding:9px 2px 8px 2px;display:flex;justify-content:space-between;align-items:baseline;}
+  .mast-left{display:flex;align-items:baseline;gap:10px;}
+  .mast-title{font-size:17px;font-weight:700;letter-spacing:.22em;}
+  .mast-sub{font-size:10px;letter-spacing:.3em;color:rgba(29,43,74,.62);font-weight:600;}
+  .mast-date{font-size:10.5px;letter-spacing:.24em;color:rgba(29,43,74,.8);font-weight:600;}
+
+  /* ---------- hero ---------- */
+  .hero{display:grid;grid-template-columns:600px 1fr;gap:18px;align-items:center;padding:28px 2px 22px 2px;}
+  .kicker{font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--coral);margin-bottom:12px;}
+  .hero h1{font-size:63px;line-height:1.03;font-weight:700;color:var(--navy-deep);letter-spacing:-0.01em;}
+  .deck{margin-top:14px;font-size:14px;line-height:1.55;color:rgba(29,43,74,.85);max-width:560px;}
+  .hero-art{justify-self:end;}
+
+  /* ---------- section band ---------- */
+  .band{display:flex;justify-content:space-between;align-items:baseline;
+    border-top:1px solid var(--line);padding:12px 2px 11px 2px;}
+  .band-l{font-size:11.5px;font-weight:700;letter-spacing:.26em;}
+  .band-r{font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(29,43,74,.65);}
+
+  /* ---------- cards ---------- */
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px;}
+  .card{background:var(--card);border:1px solid rgba(29,43,74,.10);border-radius:14px;
+    box-shadow:0 1px 2px rgba(29,43,74,.08),0 6px 16px rgba(29,43,74,.10);
+    overflow:hidden;display:flex;flex-direction:column;}
+  .chead{position:relative;height:140px;flex:none;}
+  .chead svg{position:absolute;inset:0;width:100%;height:100%;}
+  .clabels{position:absolute;top:9px;left:12px;right:12px;display:flex;justify-content:space-between;
+    font-size:8.5px;font-weight:700;letter-spacing:.16em;}
+  .cbody{padding:16px 16px 16px 16px;display:flex;flex-direction:column;flex:1;}
+  .ctitle{font-size:21px;font-weight:700;line-height:1.15;margin-bottom:8px;}
+  .ctext{font-size:12px;line-height:1.55;color:rgba(29,43,74,.85);}
+  .ctext b{font-weight:700;}
+  .tl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px;}
+  .tl-cell{border-top:2px solid var(--gold);padding-top:7px;}
+  .tl-date{font-size:10.5px;font-weight:800;letter-spacing:.12em;}
+  .tl-what{font-size:9.5px;line-height:1.35;color:rgba(29,43,74,.72);margin-top:2px;}
+  .pill{margin-top:auto;align-self:flex-start;margin-top:14px;
+    border:1.2px solid var(--gold);border-radius:999px;padding:4px 10px;
+    font-size:8.5px;font-weight:800;letter-spacing:.14em;color:var(--navy);
+    background:rgba(201,162,75,.10);}
+  .pill.plain{background:rgba(224,106,75,.10);border-color:var(--coral);}
+  .spacer{flex:1;}
+
+  /* ---------- navy strip ---------- */
+  .strip{margin-top:16px;background:linear-gradient(180deg,#20304f 0%,#182741 100%);
+    border-radius:14px;padding:20px 24px;display:grid;
+    grid-template-columns:250px 1fr 1fr 1.35fr;gap:18px;align-items:center;
+    box-shadow:0 6px 16px rgba(29,43,74,.18);}
+  .strip-label{font-size:8.5px;font-weight:700;letter-spacing:.18em;color:rgba(248,243,231,.66);margin-bottom:8px;}
+  .strip-title{font-family:Georgia,"Times New Roman","DejaVu Serif",serif;font-size:23px;line-height:1.18;color:#f6efdd;font-weight:700;}
+  .stat{border-left:1px solid rgba(246,239,221,.22);padding-left:18px;}
+  .stat-n{font-family:Georgia,"Times New Roman","DejaVu Serif",serif;font-size:33px;font-weight:700;color:var(--gold-soft);line-height:1;}
+  .stat-c{font-size:9px;font-weight:700;letter-spacing:.18em;color:rgba(246,239,221,.85);margin-top:7px;}
+  .stat-d{font-size:9.5px;line-height:1.5;color:rgba(246,239,221,.75);margin-top:6px;}
+
+  /* ---------- footer ---------- */
+  .footer{margin-top:auto;border-top:1px solid var(--line);padding-top:9px;
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;}
+  .foot-l{font-size:9.5px;font-weight:700;letter-spacing:.2em;}
+  .foot-l span{font-weight:600;letter-spacing:.06em;color:rgba(29,43,74,.62);}
+  .foot-r{display:flex;gap:18px;font-size:9.5px;color:rgba(29,43,74,.75);letter-spacing:.03em;}
+  .foot-r b{font-weight:700;}
+</style>
+</head>
+<body>
+<div class="page" id="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <div class="mast-left">
+      <span class="mast-title">WORLD BRIEF</span>
+      <span class="mast-sub">/ DAILY SIGNALS</span>
+    </div>
+    <div class="mast-date">WEDNESDAY · 18 NOVEMBER 2026</div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="kicker">THE DAY, IN THREE MOVEMENTS</div>
+      <h1 class="serif">A crowded<br>world stage.</h1>
+      <p class="deck">APEC leaders converge, climate voices continue in Antalya, and a security march draws thousands in Haiti.</p>
+    </div>
+    <div class="hero-art">
+      <!-- original illustration: pale seafoam globe, meridians, continents, dotted coral journey -->
+      <svg width="330" height="212" viewBox="0 0 330 212" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="140" cy="106" r="92" fill="#cfe3da"/>
+        <circle cx="140" cy="106" r="92" fill="none" stroke="#9dbfae" stroke-width="1.4"/>
+        <!-- curved meridians -->
+        <path d="M140 14 C 108 60, 108 152, 140 198" stroke="#9dbfae" stroke-width="1.2" fill="none"/>
+        <path d="M140 14 C 78 62, 78 150, 140 198" stroke="#9dbfae" stroke-width="1.1" fill="none" opacity=".8"/>
+        <path d="M140 14 C 172 60, 172 152, 140 198" stroke="#9dbfae" stroke-width="1.2" fill="none"/>
+        <path d="M140 14 C 202 62, 202 150, 140 198" stroke="#9dbfae" stroke-width="1.1" fill="none" opacity=".8"/>
+        <path d="M50 78 H 230" stroke="#9dbfae" stroke-width="1.1"/>
+        <path d="M44 112 H 236" stroke="#9dbfae" stroke-width="1.1"/>
+        <path d="M50 142 H 230" stroke="#9dbfae" stroke-width="1.1"/>
+        <!-- continents -->
+        <path d="M92 58 c10 -8 26 -8 34 -2 c8 6 4 16 -2 20 c-8 5 -6 14 -14 16 c-9 2 -18 -4 -20 -12 c-2 -9 -4 -16 2 -22 Z" fill="#b7d3c4"/>
+        <path d="M150 44 c14 -6 30 2 34 12 c3 9 -6 12 -14 13 c-9 1 -18 -2 -22 -9 c-4 -8 -3 -13 2 -16 Z" fill="#b7d3c4"/>
+        <path d="M120 118 c12 -4 24 2 26 12 c2 11 -6 22 -16 24 c-10 2 -20 -5 -22 -15 c-2 -10 3 -17 12 -21 Z" fill="#b7d3c4"/>
+        <path d="M178 108 c10 -3 22 1 25 10 c3 10 -2 20 -11 23 c-9 3 -19 -2 -22 -11 c-3 -9 -1 -18 8 -22 Z" fill="#b7d3c4"/>
+        <!-- dotted coral journey -->
+        <path d="M62 132 C 96 96, 150 84, 196 96 C 232 106, 258 128, 282 122"
+              stroke="#e06a4b" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-dasharray="1 9"/>
+        <circle cx="62" cy="132" r="5.5" fill="#e06a4b"/>
+        <circle cx="282" cy="122" r="5.5" fill="#e06a4b"/>
+        <circle cx="196" cy="96" r="4" fill="#c9a24b"/>
+        <!-- small marks -->
+        <line x1="256" y1="52" x2="266" y2="52" stroke="#c9a24b" stroke-width="2" stroke-linecap="round"/>
+        <line x1="272" y1="52" x2="276" y2="52" stroke="#c9a24b" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- SECTION BAND -->
+  <div class="band">
+    <div class="band-l">THREE SIGNALS FROM THE WORLD</div>
+    <div class="band-r">SUMMITS · CLIMATE · PUBLIC SAFETY</div>
+  </div>
+
+  <!-- CARDS -->
+  <div class="cards">
+
+    <!-- CARD 1 · APEC -->
+    <div class="card">
+      <div class="chead" style="background:linear-gradient(180deg,#22345a 0%,#1a2a4b 100%);">
+        <!-- original illustration: Shenzhen skyline, gold sun, three delegates at gold table -->
+        <svg viewBox="0 0 316 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="262" cy="52" r="17" fill="#c9a24b" opacity=".9"/>
+          <circle cx="262" cy="52" r="24" fill="none" stroke="#c9a24b" stroke-width="1" opacity=".45"/>
+          <!-- skyline silhouettes -->
+          <g fill="#0f1c33">
+            <rect x="8" y="74" width="16" height="52"/>
+            <rect x="28" y="58" width="20" height="68"/>
+            <rect x="52" y="84" width="14" height="42"/>
+            <rect x="70" y="40" width="22" height="86"/>
+            <polygon points="70,40 81,30 92,40"/>
+            <rect x="96" y="70" width="16" height="56"/>
+            <rect x="116" y="52" width="24" height="74"/>
+            <rect x="144" y="88" width="14" height="38"/>
+            <rect x="162" y="64" width="20" height="62"/>
+            <rect x="186" y="46" width="24" height="80"/>
+            <line x1="198" y1="30" x2="198" y2="46" stroke="#0f1c33" stroke-width="3"/>
+            <rect x="214" y="78" width="16" height="48"/>
+            <rect x="234" y="66" width="18" height="60"/>
+          </g>
+          <!-- window lights -->
+          <g fill="#c9a24b" opacity=".75">
+            <rect x="33" y="66" width="3" height="3"/><rect x="40" y="74" width="3" height="3"/>
+            <rect x="75" y="52" width="3" height="3"/><rect x="83" y="62" width="3" height="3"/>
+            <rect x="75" y="74" width="3" height="3"/><rect x="121" y="62" width="3" height="3"/>
+            <rect x="129" y="72" width="3" height="3"/><rect x="191" y="58" width="3" height="3"/>
+            <rect x="199" y="70" width="3" height="3"/><rect x="167" y="76" width="3" height="3"/>
+            <rect x="239" y="76" width="3" height="3"/>
+          </g>
+          <!-- ground line -->
+          <rect x="0" y="126" width="316" height="14" fill="#0f1c33"/>
+          <!-- gold tabletop -->
+          <ellipse cx="158" cy="104" rx="34" ry="7" fill="#c9a24b"/>
+          <rect x="154" y="104" width="8" height="14" fill="#a8843a"/>
+          <!-- three abstract delegates -->
+          <g>
+            <circle cx="118" cy="82" r="7" fill="#f6efdd"/>
+            <path d="M108 112 c0 -12 5 -20 10 -20 c5 0 10 8 10 20 Z" fill="#f6efdd"/>
+            <circle cx="198" cy="82" r="7" fill="#f6efdd"/>
+            <path d="M188 112 c0 -12 5 -20 10 -20 c5 0 10 8 10 20 Z" fill="#f6efdd"/>
+            <circle cx="158" cy="72" r="7.5" fill="#f6efdd"/>
+            <path d="M147 104 c0 -12 5 -19 11 -19 c6 0 11 7 11 19 Z" fill="#f6efdd"/>
+          </g>
+        </svg>
+        <div class="clabels" style="color:#f6efdd;">
+          <span>APEC · SHENZHEN</span><span>18–19 NOV</span>
+        </div>
+      </div>
+      <div class="cbody">
+        <div class="ctitle serif">Summit in the making</div>
+        <p class="ctext"><b>Xi hosts Trump and Putin</b> as APEC gathers. Their three-way meeting is scheduled for Thursday, 19 Nov.</p>
+        <div class="tl">
+          <div class="tl-cell"><div class="tl-date">18 NOV</div><div class="tl-what">APEC leaders gather</div></div>
+          <div class="tl-cell"><div class="tl-date">19 NOV</div><div class="tl-what">Trilateral meeting due</div></div>
+        </div>
+        <div class="spacer"></div>
+        <div class="pill">TRILATERAL MEETING · 19 NOV</div>
+      </div>
+    </div>
+
+    <!-- CARD 2 · COP31 -->
+    <div class="card">
+      <div class="chead" style="background:linear-gradient(180deg,#35857b 0%,#276b62 100%);">
+        <!-- original illustration: pale green globe, sprouting leaves, warm sun -->
+        <svg viewBox="0 0 316 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="258" cy="42" r="13" fill="#e8b85c"/>
+          <circle cx="258" cy="42" r="19" fill="none" stroke="#e8b85c" stroke-width="1" opacity=".5"/>
+          <g stroke="#e8b85c" stroke-width="1.6" stroke-linecap="round" opacity=".8">
+            <line x1="258" y1="18" x2="258" y2="23"/>
+            <line x1="258" y1="61" x2="258" y2="66"/>
+            <line x1="234" y1="42" x2="239" y2="42"/>
+            <line x1="277" y1="42" x2="282" y2="42"/>
+          </g>
+          <circle cx="128" cy="88" r="42" fill="#d7e8cd"/>
+          <circle cx="128" cy="88" r="42" fill="none" stroke="#a7c79c" stroke-width="1.4"/>
+          <path d="M128 46 C 112 68, 112 108, 128 130" stroke="#a7c79c" stroke-width="1" fill="none"/>
+          <path d="M128 46 C 144 68, 144 108, 128 130" stroke="#a7c79c" stroke-width="1" fill="none"/>
+          <path d="M88 82 H 168" stroke="#a7c79c" stroke-width="1"/>
+          <path d="M98 68 c10 -8 22 -7 28 0 c4 6 -2 12 -10 13 c-9 1 -19 -4 -18 -13 Z" fill="#bcd9ad"/>
+          <path d="M132 96 c9 -6 20 -4 24 3 c3 7 -4 12 -11 11 c-8 -1 -16 -7 -13 -14 Z" fill="#bcd9ad"/>
+          <!-- sprouting leaves -->
+          <g>
+            <path d="M128 130 C 128 118, 128 112, 128 104" stroke="#bcd9ad" stroke-width="2.4" fill="none"/>
+            <path d="M128 108 C 120 104, 116 96, 118 90 C 126 92, 130 100, 128 108 Z" fill="#d7e8cd"/>
+            <path d="M128 116 C 136 112, 140 104, 138 98 C 130 100, 126 108, 128 116 Z" fill="#d7e8cd"/>
+          </g>
+          <rect x="0" y="126" width="316" height="14" fill="#1d544c"/>
+        </svg>
+        <div class="clabels" style="color:#f2f8ee;">
+          <span>COP31 · ANTALYA</span><span>17–18 NOV</span>
+        </div>
+      </div>
+      <div class="cbody">
+        <div class="ctitle serif">Climate voices continue</div>
+        <p class="ctext">At the Antalya climate talks, <b>national leaders’ statements</b> continue through 18 Nov.</p>
+        <div class="tl">
+          <div class="tl-cell"><div class="tl-date">17 NOV</div><div class="tl-what">High-level statements</div></div>
+          <div class="tl-cell"><div class="tl-date">18 NOV</div><div class="tl-what">Statements continue</div></div>
+        </div>
+        <div class="spacer"></div>
+        <div class="pill">LEADERS’ STATEMENTS · 17–18 NOV</div>
+      </div>
+    </div>
+
+    <!-- CARD 3 · HAITI -->
+    <div class="card">
+      <div class="chead" style="background:linear-gradient(180deg,#b0513a 0%,#9a412c 100%);">
+        <!-- original illustration: abstract rally figures, raised hands, blank sign -->
+        <svg viewBox="0 0 316 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- blank protest sign -->
+          <g>
+            <line x1="112" y1="112" x2="106" y2="64" stroke="#f6efdd" stroke-width="3"/>
+            <rect x="74" y="34" width="62" height="36" rx="3" fill="#f6efdd"/>
+          </g>
+          <!-- figures -->
+          <g fill="#f6efdd">
+            <!-- figure 1 -->
+            <circle cx="170" cy="70" r="7"/>
+            <path d="M160 112 c0 -14 5 -22 10 -22 c5 0 10 8 10 22 Z"/>
+            <path d="M163 96 L 156 78" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="155" cy="76" r="3.4"/>
+            <!-- figure 2 -->
+            <circle cx="208" cy="64" r="7"/>
+            <path d="M198 112 c0 -14 5 -22 10 -22 c5 0 10 8 10 22 Z"/>
+            <path d="M205 96 L 200 78" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="199" cy="76" r="3.4"/>
+            <!-- figure 3 -->
+            <circle cx="248" cy="72" r="7"/>
+            <path d="M238 112 c0 -14 5 -22 10 -22 c5 0 10 8 10 22 Z"/>
+            <path d="M253 96 L 262 78" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="263" cy="76" r="3.4"/>
+            <!-- figure 4 -->
+            <circle cx="282" cy="80" r="6.4"/>
+            <path d="M273 112 c0 -12 4.5 -19 9 -19 c4.5 0 9 7 9 19 Z"/>
+            <path d="M285 96 L 292 82" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="293" cy="80" r="3"/>
+          </g>
+          <!-- ground -->
+          <rect x="0" y="126" width="316" height="14" fill="#7e3524"/>
+        </svg>
+        <div class="clabels" style="color:#fdf3ea;">
+          <span>HAITI · PORT-AU-PRINCE</span><span>REPORTED 18 NOV</span>
+        </div>
+      </div>
+      <div class="cbody">
+        <div class="ctitle serif">Thousands march for security</div>
+        <p class="ctext"><b>AFP reports</b> Tuesday’s rally backed Salvadoran anti-gang troops. The march was held on 17 Nov.</p>
+        <div class="spacer"></div>
+        <div class="pill plain">PROTEST HELD TUE · 17 NOV</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NAVY STAT STRIP -->
+  <div class="strip">
+    <div>
+      <div class="strip-label">HAITI · UN FIGURES CITED BY AFP</div>
+      <div class="strip-title">Armed violence<br>Jan–Oct 2026</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">4,595</div>
+      <div class="stat-c">KILLED</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">2,050</div>
+      <div class="stat-c">INJURED</div>
+    </div>
+    <div class="stat">
+      <div class="stat-n">2,000+</div>
+      <div class="stat-d">Salvadoran personnel deployed since late October, per AFP.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="foot-l">WORLD <span>/ 18 NOV 2026 · A daily news picture</span></div>
+    <div class="foot-r">
+      <span><b>Reporting:</b> Le Monde · UNFCCC · AFP / UN figures</span>
+      <span>Full source links and date notes in README</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
