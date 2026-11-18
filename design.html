@@ -2,352 +2,330 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>World Brief — Daily Signals · 18 November 2026</title>
+<title>World Brief — 18 November 2026</title>
 <style>
   :root{
-    --ivory:#f8f3e7;
-    --card:#fffdf6;
-    --navy:#1d2b4a;
-    --navy-deep:#16233d;
-    --coral:#e06a4b;
+    --paper:#f3f0e7;
+    --ink:#142934;
+    --ink-soft:#3d5059;
+    --muted:#67767f;
+    --coral:#dd5a37;
     --teal:#2e7d74;
-    --gold:#c9a24b;
-    --gold-soft:#d9b25f;
-    --rust:#b0513a;
-    --seafoam:#cfe3da;
-    --line:rgba(29,43,74,.28);
-    --line-fine:rgba(29,43,74,.18);
+    --steel:#4a6f8e;
+    --sage:#5f8a5e;
+    --amber:#b98a2c;
+    --gold:#c2932f;
+    --purple:#77599f;
+    --green:#4d8a4f;
+    --card:#fdfcf7;
+    --card-border:#e2dccb;
+    --chip:#ece7d8;
+    --rule:#d8d2c0;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  html,body{background:#e9e4d6;}
-  body{font-family:"Helvetica Neue",Arial,"DejaVu Sans",sans-serif;color:var(--navy);}
-  .serif{font-family:Georgia,"Times New Roman","DejaVu Serif",serif;}
-
-  .page{
+  html,body{width:1024px;height:1024px;overflow:hidden;}
+  body{
+    background:var(--paper);
+    font-family:"Noto Sans","DejaVu Sans",Arial,sans-serif;
+    color:var(--ink);
     position:relative;
-    width:1024px;height:960px;
-    background:
-      radial-gradient(1200px 700px at 85% -10%, #fdfaf1 0%, rgba(253,250,241,0) 60%),
-      var(--ivory);
-    overflow:hidden;
-    padding:24px 34px 20px 34px;
-    display:flex;flex-direction:column;
   }
-  .page::after{ /* faint paper grain vignette */
-    content:"";position:absolute;inset:0;pointer-events:none;
-    background:radial-gradient(1400px 900px at 50% 40%, rgba(0,0,0,0) 70%, rgba(60,45,20,.05) 100%);
-  }
+  .serif{font-family:Georgia,"Noto Serif","DejaVu Serif",serif;}
+  .page{position:relative;width:1024px;height:1024px;padding:42px;}
 
-  /* ---------- masthead ---------- */
-  .masthead{border-top:1.5px solid var(--navy);border-bottom:1px solid var(--line-fine);
-    padding:9px 2px 8px 2px;display:flex;justify-content:space-between;align-items:baseline;}
-  .mast-left{display:flex;align-items:baseline;gap:10px;}
-  .mast-title{font-size:17px;font-weight:700;letter-spacing:.22em;}
-  .mast-sub{font-size:10px;letter-spacing:.3em;color:rgba(29,43,74,.62);font-weight:600;}
-  .mast-date{font-size:10.5px;letter-spacing:.24em;color:rgba(29,43,74,.8);font-weight:600;}
+  /* ---------- header ---------- */
+  .masthead{display:flex;justify-content:space-between;align-items:center;height:16px;}
+  .brand{display:flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;letter-spacing:2.6px;}
+  .brand .dot{width:11px;height:11px;border-radius:50%;background:var(--coral);}
+  .mastdate{font-size:12px;font-weight:700;letter-spacing:2.2px;color:var(--ink);}
+  .headrule{border:none;border-top:1.5px solid var(--ink);margin-top:10px;}
 
-  /* ---------- hero ---------- */
-  .hero{display:grid;grid-template-columns:600px 1fr;gap:18px;align-items:center;padding:28px 2px 22px 2px;}
-  .kicker{font-size:11px;font-weight:700;letter-spacing:.3em;color:var(--coral);margin-bottom:12px;}
-  .hero h1{font-size:63px;line-height:1.03;font-weight:700;color:var(--navy-deep);letter-spacing:-0.01em;}
-  .deck{margin-top:14px;font-size:14px;line-height:1.55;color:rgba(29,43,74,.85);max-width:560px;}
-  .hero-art{justify-self:end;}
+  /* ---------- lead row ---------- */
+  .lead-row{display:flex;margin-top:14px;}
+  .lead-left{width:480px;flex:none;padding-top:6px;}
+  .eyebrow{font-size:11px;font-weight:700;letter-spacing:2.4px;color:var(--coral);}
+  h1.headline{font-size:61px;line-height:1.04;font-weight:700;letter-spacing:-0.5px;margin-top:12px;}
+  .standfirst{margin-top:16px;font-size:14.5px;line-height:1.42;color:var(--ink-soft);width:470px;}
+  .chips{display:flex;gap:8px;margin-top:18px;}
+  .chip{background:var(--chip);border:1px solid var(--card-border);border-radius:3px;
+        padding:5px 10px;font-size:9.5px;font-weight:700;letter-spacing:1.4px;color:var(--ink-soft);
+        display:flex;align-items:center;gap:6px;}
+  .chip .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);}
 
-  /* ---------- section band ---------- */
-  .band{display:flex;justify-content:space-between;align-items:baseline;
-    border-top:1px solid var(--line);padding:12px 2px 11px 2px;}
-  .band-l{font-size:11.5px;font-weight:700;letter-spacing:.26em;}
-  .band-r{font-size:10px;font-weight:600;letter-spacing:.22em;color:rgba(29,43,74,.65);}
+  /* ---------- map panel ---------- */
+  .map-panel{margin-left:auto;width:438px;height:218px;flex:none;background:#fbfaf3;
+             border:1px solid var(--card-border);border-radius:12px;padding:12px 14px 8px;
+             box-shadow:0 1px 3px rgba(20,41,52,.07);}
+  .map-head{display:flex;justify-content:space-between;font-size:8.5px;font-weight:700;
+            letter-spacing:1.6px;color:var(--ink-soft);}
+  .map-head .right{color:var(--muted);}
+  svg.map{display:block;margin-top:5px;}
+  .map-legend{display:flex;justify-content:space-between;margin-top:4px;font-size:8px;
+              font-weight:700;letter-spacing:1.1px;color:var(--muted);}
+  .map-legend b{color:var(--ink-soft);}
 
-  /* ---------- cards ---------- */
-  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:10px;}
-  .card{background:var(--card);border:1px solid rgba(29,43,74,.10);border-radius:14px;
-    box-shadow:0 1px 2px rgba(29,43,74,.08),0 6px 16px rgba(29,43,74,.10);
-    overflow:hidden;display:flex;flex-direction:column;}
-  .chead{position:relative;height:140px;flex:none;}
-  .chead svg{position:absolute;inset:0;width:100%;height:100%;}
-  .clabels{position:absolute;top:9px;left:12px;right:12px;display:flex;justify-content:space-between;
-    font-size:8.5px;font-weight:700;letter-spacing:.16em;}
-  .cbody{padding:16px 16px 16px 16px;display:flex;flex-direction:column;flex:1;}
-  .ctitle{font-size:21px;font-weight:700;line-height:1.15;margin-bottom:8px;}
-  .ctext{font-size:12px;line-height:1.55;color:rgba(29,43,74,.85);}
-  .ctext b{font-weight:700;}
-  .tl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:13px;}
-  .tl-cell{border-top:2px solid var(--gold);padding-top:7px;}
-  .tl-date{font-size:10.5px;font-weight:800;letter-spacing:.12em;}
-  .tl-what{font-size:9.5px;line-height:1.35;color:rgba(29,43,74,.72);margin-top:2px;}
-  .pill{margin-top:auto;align-self:flex-start;margin-top:14px;
-    border:1.2px solid var(--gold);border-radius:999px;padding:4px 10px;
-    font-size:8.5px;font-weight:800;letter-spacing:.14em;color:var(--navy);
-    background:rgba(201,162,75,.10);}
-  .pill.plain{background:rgba(224,106,75,.10);border-color:var(--coral);}
-  .spacer{flex:1;}
+  /* ---------- section heading ---------- */
+  .section-rule{border:none;border-top:1.5px solid var(--ink);margin-top:10px;}
+  .section-head{display:flex;justify-content:space-between;align-items:baseline;margin-top:11px;}
+  .section-title{font-size:12.5px;font-weight:800;letter-spacing:2.2px;}
+  .section-sub{font-size:8.5px;font-weight:700;letter-spacing:1.5px;color:var(--muted);}
 
-  /* ---------- navy strip ---------- */
-  .strip{margin-top:16px;background:linear-gradient(180deg,#20304f 0%,#182741 100%);
-    border-radius:14px;padding:20px 24px;display:grid;
-    grid-template-columns:250px 1fr 1fr 1.35fr;gap:18px;align-items:center;
-    box-shadow:0 6px 16px rgba(29,43,74,.18);}
-  .strip-label{font-size:8.5px;font-weight:700;letter-spacing:.18em;color:rgba(248,243,231,.66);margin-bottom:8px;}
-  .strip-title{font-family:Georgia,"Times New Roman","DejaVu Serif",serif;font-size:23px;line-height:1.18;color:#f6efdd;font-weight:700;}
-  .stat{border-left:1px solid rgba(246,239,221,.22);padding-left:18px;}
-  .stat-n{font-family:Georgia,"Times New Roman","DejaVu Serif",serif;font-size:33px;font-weight:700;color:var(--gold-soft);line-height:1;}
-  .stat-c{font-size:9px;font-weight:700;letter-spacing:.18em;color:rgba(246,239,221,.85);margin-top:7px;}
-  .stat-d{font-size:9.5px;line-height:1.5;color:rgba(246,239,221,.75);margin-top:6px;}
+  /* ---------- card grid ---------- */
+  .grid{margin-top:12px;display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(3,1fr);
+        gap:10px;height:516px;}
+  .card{background:var(--card);border:1px solid var(--card-border);border-radius:9px;
+        box-shadow:0 1px 3px rgba(20,41,52,.06);padding:0 12px 8px;position:relative;
+        display:flex;flex-direction:column;overflow:hidden;}
+  .card .toprule{height:3px;border-radius:0 0 2px 2px;margin:0 -12px 9px;flex:none;}
+  .card .label-row{display:flex;justify-content:space-between;align-items:flex-start;}
+  .card .label{font-size:8.5px;font-weight:800;letter-spacing:1.3px;color:var(--ink-soft);padding-top:2px;}
+  .card .num{font-size:8.5px;font-weight:800;letter-spacing:.5px;color:var(--muted);
+             background:#efeadd;border-radius:7px;padding:2px 6px;flex:none;}
+  .card h3{font-size:16.5px;line-height:1.12;font-weight:700;margin-top:7px;}
+  .card p{font-size:10.5px;line-height:1.34;color:var(--ink-soft);margin-top:5px;}
+  .card .foot{margin-top:auto;display:flex;justify-content:space-between;align-items:baseline;
+              font-size:7.5px;font-weight:800;letter-spacing:.9px;color:var(--muted);padding-top:6px;}
+  .card .place{letter-spacing:.7px;}
 
-  /* ---------- footer ---------- */
-  .footer{margin-top:auto;border-top:1px solid var(--line);padding-top:9px;
-    display:flex;justify-content:space-between;align-items:baseline;gap:16px;}
-  .foot-l{font-size:9.5px;font-weight:700;letter-spacing:.2em;}
-  .foot-l span{font-weight:600;letter-spacing:.06em;color:rgba(29,43,74,.62);}
-  .foot-r{display:flex;gap:18px;font-size:9.5px;color:rgba(29,43,74,.75);letter-spacing:.03em;}
-  .foot-r b{font-weight:700;}
+  /* ---------- timeline band ---------- */
+  .timeline{margin-top:12px;background:var(--ink);border-radius:10px;height:68px;
+            display:flex;align-items:center;padding:0 22px;gap:26px;color:#f4f1e6;}
+  .tl-intro{width:150px;flex:none;}
+  .tl-intro .kicker{font-size:8px;font-weight:800;letter-spacing:2px;color:#f0a58e;}
+  .tl-intro .t{font-size:13.5px;font-weight:700;font-style:italic;line-height:1.15;margin-top:3px;}
+  .tl-item{border-left:1px solid rgba(244,241,230,.25);padding-left:20px;flex:1;}
+  .tl-item .when{font-size:9px;font-weight:800;letter-spacing:1.6px;color:#f0a58e;}
+  .tl-item .what{font-size:12px;font-weight:700;margin-top:3px;}
+  .tl-item .note{font-size:8.5px;color:#a9b6ba;margin-top:2px;letter-spacing:.3px;}
+
+  /* ---------- footnote ---------- */
+  .foot-row{display:flex;justify-content:space-between;align-items:flex-start;margin-top:11px;}
+  .foot-left{font-size:9px;font-weight:800;letter-spacing:1.4px;color:var(--ink);}
+  .foot-left span{font-weight:400;letter-spacing:.4px;color:var(--muted);}
+  .foot-right{width:560px;text-align:right;font-size:8px;line-height:1.45;color:var(--muted);}
+  .foot-right b{color:var(--ink-soft);letter-spacing:.8px;}
 </style>
 </head>
 <body>
-<div class="page" id="page">
+<div class="page">
 
-  <!-- MASTHEAD -->
+  <!-- masthead -->
   <div class="masthead">
-    <div class="mast-left">
-      <span class="mast-title">WORLD BRIEF</span>
-      <span class="mast-sub">/ DAILY SIGNALS</span>
-    </div>
-    <div class="mast-date">WEDNESDAY · 18 NOVEMBER 2026</div>
+    <div class="brand"><span class="dot"></span>WORLD BRIEF / DAILY SIGNALS</div>
+    <div class="mastdate">WEDNESDAY &middot; 18 NOVEMBER 2026</div>
   </div>
+  <hr class="headrule">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div>
-      <div class="kicker">THE DAY, IN THREE MOVEMENTS</div>
-      <h1 class="serif">A crowded<br>world stage.</h1>
-      <p class="deck">APEC leaders converge, climate voices continue in Antalya, and a security march draws thousands in Haiti.</p>
+  <!-- lead -->
+  <div class="lead-row">
+    <div class="lead-left">
+      <div class="eyebrow">THE WORLD, IN MOTION &middot; 01 / 13</div>
+      <h1 class="headline serif">A crowded<br>world stage.</h1>
+      <div class="standfirst">APEC meets in Shenzhen as Xi calls for open trade. A Xi&ndash;Trump&ndash;Putin
+        meeting is scheduled for Thursday, 19 November&mdash;not yet held.</div>
+      <div class="chips">
+        <div class="chip"><span class="dot"></span>APEC &middot; SHENZHEN</div>
+        <div class="chip">SUMMIT &middot; 18&ndash;19 NOV</div>
+        <div class="chip">TALKS DUE &middot; 19 NOV</div>
+      </div>
     </div>
-    <div class="hero-art">
-      <!-- original illustration: pale seafoam globe, meridians, continents, dotted coral journey -->
-      <svg width="330" height="212" viewBox="0 0 330 212" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="140" cy="106" r="92" fill="#cfe3da"/>
-        <circle cx="140" cy="106" r="92" fill="none" stroke="#9dbfae" stroke-width="1.4"/>
-        <!-- curved meridians -->
-        <path d="M140 14 C 108 60, 108 152, 140 198" stroke="#9dbfae" stroke-width="1.2" fill="none"/>
-        <path d="M140 14 C 78 62, 78 150, 140 198" stroke="#9dbfae" stroke-width="1.1" fill="none" opacity=".8"/>
-        <path d="M140 14 C 172 60, 172 152, 140 198" stroke="#9dbfae" stroke-width="1.2" fill="none"/>
-        <path d="M140 14 C 202 62, 202 150, 140 198" stroke="#9dbfae" stroke-width="1.1" fill="none" opacity=".8"/>
-        <path d="M50 78 H 230" stroke="#9dbfae" stroke-width="1.1"/>
-        <path d="M44 112 H 236" stroke="#9dbfae" stroke-width="1.1"/>
-        <path d="M50 142 H 230" stroke="#9dbfae" stroke-width="1.1"/>
-        <!-- continents -->
-        <path d="M92 58 c10 -8 26 -8 34 -2 c8 6 4 16 -2 20 c-8 5 -6 14 -14 16 c-9 2 -18 -4 -20 -12 c-2 -9 -4 -16 2 -22 Z" fill="#b7d3c4"/>
-        <path d="M150 44 c14 -6 30 2 34 12 c3 9 -6 12 -14 13 c-9 1 -18 -2 -22 -9 c-4 -8 -3 -13 2 -16 Z" fill="#b7d3c4"/>
-        <path d="M120 118 c12 -4 24 2 26 12 c2 11 -6 22 -16 24 c-10 2 -20 -5 -22 -15 c-2 -10 3 -17 12 -21 Z" fill="#b7d3c4"/>
-        <path d="M178 108 c10 -3 22 1 25 10 c3 10 -2 20 -11 23 c-9 3 -19 -2 -22 -11 c-3 -9 -1 -18 8 -22 Z" fill="#b7d3c4"/>
-        <!-- dotted coral journey -->
-        <path d="M62 132 C 96 96, 150 84, 196 96 C 232 106, 258 128, 282 122"
-              stroke="#e06a4b" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-dasharray="1 9"/>
-        <circle cx="62" cy="132" r="5.5" fill="#e06a4b"/>
-        <circle cx="282" cy="122" r="5.5" fill="#e06a4b"/>
-        <circle cx="196" cy="96" r="4" fill="#c9a24b"/>
-        <!-- small marks -->
-        <line x1="256" y1="52" x2="266" y2="52" stroke="#c9a24b" stroke-width="2" stroke-linecap="round"/>
-        <line x1="272" y1="52" x2="276" y2="52" stroke="#c9a24b" stroke-width="2" stroke-linecap="round"/>
+
+    <div class="map-panel">
+      <div class="map-head">
+        <span>GLOBAL DESK / 13 STORIES</span>
+        <span class="right">NUMBERED LOCATION PINS</span>
+      </div>
+      <svg class="map" width="410" height="164" viewBox="0 0 410 164" xmlns="http://www.w3.org/2000/svg">
+        <rect x="0" y="0" width="410" height="164" rx="7" fill="#e9ecdf"/>
+        <g stroke="#d7dcc8" stroke-width="1">
+          <line x1="0" y1="41" x2="410" y2="41"/><line x1="0" y1="82" x2="410" y2="82"/><line x1="0" y1="123" x2="410" y2="123"/>
+          <line x1="68" y1="0" x2="68" y2="164"/><line x1="136" y1="0" x2="136" y2="164"/>
+          <line x1="205" y1="0" x2="205" y2="164"/><line x1="274" y1="0" x2="274" y2="164"/><line x1="342" y1="0" x2="342" y2="164"/>
+        </g>
+        <!-- schematic continents -->
+        <g fill="#c6d2c0">
+          <path d="M28 34 Q52 22 78 30 Q104 38 100 56 Q96 72 78 76 Q62 80 54 92 Q46 104 36 98 Q22 88 20 64 Q20 42 28 34 Z"/>
+          <path d="M92 100 Q108 94 118 106 Q128 120 120 136 Q112 150 100 146 Q90 140 88 122 Q86 108 92 100 Z"/>
+          <path d="M158 40 Q184 30 208 38 Q230 46 226 64 Q222 80 202 86 Q184 92 170 84 Q154 74 152 58 Q152 46 158 40 Z"/>
+          <path d="M216 98 Q234 90 250 98 Q266 106 262 122 Q258 138 242 144 Q226 150 214 138 Q204 126 208 112 Q210 102 216 98 Z"/>
+          <path d="M234 46 Q256 36 278 44 Q296 52 290 68 Q284 82 266 84 Q250 86 240 76 Q230 66 232 54 Q232 50 234 46 Z"/>
+          <path d="M290 90 Q314 82 338 90 Q360 98 356 114 Q350 130 328 132 Q308 134 298 122 Q288 108 290 98 Z"/>
+          <path d="M348 66 Q364 60 378 68 Q388 76 382 88 Q374 96 362 92 Q350 88 346 78 Q344 70 348 66 Z"/>
+          <path d="M382 118 Q394 114 402 122 Q408 130 400 138 Q392 144 384 138 Q376 132 378 124 Q378 120 382 118 Z"/>
+        </g>
+        <!-- coral dotted arc -->
+        <path d="M60 56 Q170 -6 268 62 Q322 104 348 80" fill="none" stroke="#dd5a37"
+              stroke-width="1.6" stroke-dasharray="1.5 5" stroke-linecap="round"/>
+        <!-- pins + leader labels: bands top y10-40 / mid y84-112 / bottom y140-152, no overlaps -->
+        <g font-family="Noto Sans, DejaVu Sans, Arial, sans-serif" font-size="7" font-weight="700">
+          <!-- 08 Santa Clara -->
+          <line x1="58" y1="52" x2="62" y2="38" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="58" cy="62" r="9" fill="#ffffff" stroke="#dd5a37" stroke-width="2"/>
+          <text x="58" y="64.8" text-anchor="middle" fill="#142934">08</text>
+          <rect x="30" y="25" width="76" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="35" y="34" fill="#3d5059" letter-spacing="0.5">08 SANTA CLARA</text>
+          <!-- 09 Global (mid-ocean) -->
+          <line x1="56" y1="128" x2="50" y2="140" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="58" cy="119" r="9" fill="#ffffff" stroke="#5f8a5e" stroke-width="2"/>
+          <text x="58" y="121.8" text-anchor="middle" fill="#142934">09</text>
+          <rect x="24" y="140" width="52" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="29" y="149" fill="#3d5059" letter-spacing="0.5">09 GLOBAL</text>
+          <!-- 06 Port-au-Prince -->
+          <line x1="127" y1="94" x2="140" y2="92" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="118" cy="94" r="9" fill="#ffffff" stroke="#dd5a37" stroke-width="2"/>
+          <text x="118" y="96.8" text-anchor="middle" fill="#142934">06</text>
+          <rect x="140" y="86" width="88" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="145" y="95" fill="#3d5059" letter-spacing="0.5">06 PORT-AU-PRINCE</text>
+          <!-- 13 Brussels -->
+          <line x1="244" y1="48" x2="256" y2="38" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="240" cy="54" r="9" fill="#ffffff" stroke="#4a6f8e" stroke-width="2"/>
+          <text x="240" y="56.8" text-anchor="middle" fill="#142934">13</text>
+          <rect x="256" y="28" width="64" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="261" y="37" fill="#3d5059" letter-spacing="0.5">13 BRUSSELS</text>
+          <!-- 12 Seoul -->
+          <line x1="348" y1="24" x2="344" y2="20" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="352" cy="30" r="9" fill="#ffffff" stroke="#4a6f8e" stroke-width="2"/>
+          <text x="352" y="32.8" text-anchor="middle" fill="#142934">12</text>
+          <rect x="300" y="8" width="46" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="305" y="17" fill="#3d5059" letter-spacing="0.5">12 SEOUL</text>
+          <!-- 05 Antalya -->
+          <line x1="300" y1="64" x2="308" y2="60" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="294" cy="70" r="9" fill="#ffffff" stroke="#2e7d74" stroke-width="2"/>
+          <text x="294" y="72.8" text-anchor="middle" fill="#142934">05</text>
+          <rect x="306" y="54" width="54" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="311" y="63" fill="#3d5059" letter-spacing="0.5">05 ANTALYA</text>
+          <!-- 01-03 Shenzhen (pill pin) -->
+          <line x1="374" y1="67" x2="370" y2="54" stroke="#8a97a0" stroke-width="1"/>
+          <ellipse cx="374" cy="76" rx="13" ry="9" fill="#ffffff" stroke="#dd5a37" stroke-width="2"/>
+          <text x="374" y="78.2" text-anchor="middle" fill="#142934" font-size="6.2">01&#8211;03</text>
+          <rect x="330" y="42" width="50" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="335" y="51" fill="#3d5059" letter-spacing="0.5">SHENZHEN</text>
+          <!-- 10 Tokyo -->
+          <line x1="396" y1="62" x2="388" y2="88" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="398" cy="54" r="9" fill="#ffffff" stroke="#b98a2c" stroke-width="2"/>
+          <text x="398" y="56.8" text-anchor="middle" fill="#142934">10</text>
+          <rect x="344" y="88" width="46" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="349" y="97" fill="#3d5059" letter-spacing="0.5">10 TOKYO</text>
+          <!-- 11 Manila (filled) -->
+          <line x1="381" y1="118" x2="368" y2="128" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="388" cy="112" r="9" fill="#142934" stroke="#142934" stroke-width="2"/>
+          <text x="388" y="114.8" text-anchor="middle" fill="#ffffff">11</text>
+          <rect x="330" y="126" width="50" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="335" y="135" fill="#3d5059" letter-spacing="0.5">11 MANILA</text>
+          <!-- 04 Jakarta -->
+          <line x1="292" y1="136" x2="288" y2="138" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="294" cy="128" r="9" fill="#ffffff" stroke="#2e7d74" stroke-width="2"/>
+          <text x="294" y="130.8" text-anchor="middle" fill="#142934">04</text>
+          <rect x="264" y="138" width="56" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="269" y="147" fill="#3d5059" letter-spacing="0.5">04 JAKARTA</text>
+          <!-- 07 Papua New Guinea -->
+          <line x1="398" y1="138" x2="390" y2="142" stroke="#8a97a0" stroke-width="1"/>
+          <circle cx="400" cy="132" r="9" fill="#ffffff" stroke="#b98a2c" stroke-width="2"/>
+          <text x="400" y="134.8" text-anchor="middle" fill="#142934">07</text>
+          <rect x="336" y="142" width="62" height="12" rx="3" fill="#ffffff" stroke="#e2dccb"/>
+          <text x="341" y="151" fill="#3d5059" letter-spacing="0.5">07 PAPUA NG</text>
+        </g>
       </svg>
-    </div>
-  </div>
-
-  <!-- SECTION BAND -->
-  <div class="band">
-    <div class="band-l">THREE SIGNALS FROM THE WORLD</div>
-    <div class="band-r">SUMMITS · CLIMATE · PUBLIC SAFETY</div>
-  </div>
-
-  <!-- CARDS -->
-  <div class="cards">
-
-    <!-- CARD 1 · APEC -->
-    <div class="card">
-      <div class="chead" style="background:linear-gradient(180deg,#22345a 0%,#1a2a4b 100%);">
-        <!-- original illustration: Shenzhen skyline, gold sun, three delegates at gold table -->
-        <svg viewBox="0 0 316 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="262" cy="52" r="17" fill="#c9a24b" opacity=".9"/>
-          <circle cx="262" cy="52" r="24" fill="none" stroke="#c9a24b" stroke-width="1" opacity=".45"/>
-          <!-- skyline silhouettes -->
-          <g fill="#0f1c33">
-            <rect x="8" y="74" width="16" height="52"/>
-            <rect x="28" y="58" width="20" height="68"/>
-            <rect x="52" y="84" width="14" height="42"/>
-            <rect x="70" y="40" width="22" height="86"/>
-            <polygon points="70,40 81,30 92,40"/>
-            <rect x="96" y="70" width="16" height="56"/>
-            <rect x="116" y="52" width="24" height="74"/>
-            <rect x="144" y="88" width="14" height="38"/>
-            <rect x="162" y="64" width="20" height="62"/>
-            <rect x="186" y="46" width="24" height="80"/>
-            <line x1="198" y1="30" x2="198" y2="46" stroke="#0f1c33" stroke-width="3"/>
-            <rect x="214" y="78" width="16" height="48"/>
-            <rect x="234" y="66" width="18" height="60"/>
-          </g>
-          <!-- window lights -->
-          <g fill="#c9a24b" opacity=".75">
-            <rect x="33" y="66" width="3" height="3"/><rect x="40" y="74" width="3" height="3"/>
-            <rect x="75" y="52" width="3" height="3"/><rect x="83" y="62" width="3" height="3"/>
-            <rect x="75" y="74" width="3" height="3"/><rect x="121" y="62" width="3" height="3"/>
-            <rect x="129" y="72" width="3" height="3"/><rect x="191" y="58" width="3" height="3"/>
-            <rect x="199" y="70" width="3" height="3"/><rect x="167" y="76" width="3" height="3"/>
-            <rect x="239" y="76" width="3" height="3"/>
-          </g>
-          <!-- ground line -->
-          <rect x="0" y="126" width="316" height="14" fill="#0f1c33"/>
-          <!-- gold tabletop -->
-          <ellipse cx="158" cy="104" rx="34" ry="7" fill="#c9a24b"/>
-          <rect x="154" y="104" width="8" height="14" fill="#a8843a"/>
-          <!-- three abstract delegates -->
-          <g>
-            <circle cx="118" cy="82" r="7" fill="#f6efdd"/>
-            <path d="M108 112 c0 -12 5 -20 10 -20 c5 0 10 8 10 20 Z" fill="#f6efdd"/>
-            <circle cx="198" cy="82" r="7" fill="#f6efdd"/>
-            <path d="M188 112 c0 -12 5 -20 10 -20 c5 0 10 8 10 20 Z" fill="#f6efdd"/>
-            <circle cx="158" cy="72" r="7.5" fill="#f6efdd"/>
-            <path d="M147 104 c0 -12 5 -19 11 -19 c6 0 11 7 11 19 Z" fill="#f6efdd"/>
-          </g>
-        </svg>
-        <div class="clabels" style="color:#f6efdd;">
-          <span>APEC · SHENZHEN</span><span>18–19 NOV</span>
-        </div>
-      </div>
-      <div class="cbody">
-        <div class="ctitle serif">Summit in the making</div>
-        <p class="ctext"><b>Xi hosts Trump and Putin</b> as APEC gathers. Their three-way meeting is scheduled for Thursday, 19 Nov.</p>
-        <div class="tl">
-          <div class="tl-cell"><div class="tl-date">18 NOV</div><div class="tl-what">APEC leaders gather</div></div>
-          <div class="tl-cell"><div class="tl-date">19 NOV</div><div class="tl-what">Trilateral meeting due</div></div>
-        </div>
-        <div class="spacer"></div>
-        <div class="pill">TRILATERAL MEETING · 19 NOV</div>
-      </div>
-    </div>
-
-    <!-- CARD 2 · COP31 -->
-    <div class="card">
-      <div class="chead" style="background:linear-gradient(180deg,#35857b 0%,#276b62 100%);">
-        <!-- original illustration: pale green globe, sprouting leaves, warm sun -->
-        <svg viewBox="0 0 316 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="258" cy="42" r="13" fill="#e8b85c"/>
-          <circle cx="258" cy="42" r="19" fill="none" stroke="#e8b85c" stroke-width="1" opacity=".5"/>
-          <g stroke="#e8b85c" stroke-width="1.6" stroke-linecap="round" opacity=".8">
-            <line x1="258" y1="18" x2="258" y2="23"/>
-            <line x1="258" y1="61" x2="258" y2="66"/>
-            <line x1="234" y1="42" x2="239" y2="42"/>
-            <line x1="277" y1="42" x2="282" y2="42"/>
-          </g>
-          <circle cx="128" cy="88" r="42" fill="#d7e8cd"/>
-          <circle cx="128" cy="88" r="42" fill="none" stroke="#a7c79c" stroke-width="1.4"/>
-          <path d="M128 46 C 112 68, 112 108, 128 130" stroke="#a7c79c" stroke-width="1" fill="none"/>
-          <path d="M128 46 C 144 68, 144 108, 128 130" stroke="#a7c79c" stroke-width="1" fill="none"/>
-          <path d="M88 82 H 168" stroke="#a7c79c" stroke-width="1"/>
-          <path d="M98 68 c10 -8 22 -7 28 0 c4 6 -2 12 -10 13 c-9 1 -19 -4 -18 -13 Z" fill="#bcd9ad"/>
-          <path d="M132 96 c9 -6 20 -4 24 3 c3 7 -4 12 -11 11 c-8 -1 -16 -7 -13 -14 Z" fill="#bcd9ad"/>
-          <!-- sprouting leaves -->
-          <g>
-            <path d="M128 130 C 128 118, 128 112, 128 104" stroke="#bcd9ad" stroke-width="2.4" fill="none"/>
-            <path d="M128 108 C 120 104, 116 96, 118 90 C 126 92, 130 100, 128 108 Z" fill="#d7e8cd"/>
-            <path d="M128 116 C 136 112, 140 104, 138 98 C 130 100, 126 108, 128 116 Z" fill="#d7e8cd"/>
-          </g>
-          <rect x="0" y="126" width="316" height="14" fill="#1d544c"/>
-        </svg>
-        <div class="clabels" style="color:#f2f8ee;">
-          <span>COP31 · ANTALYA</span><span>17–18 NOV</span>
-        </div>
-      </div>
-      <div class="cbody">
-        <div class="ctitle serif">Climate voices continue</div>
-        <p class="ctext">At the Antalya climate talks, <b>national leaders’ statements</b> continue through 18 Nov.</p>
-        <div class="tl">
-          <div class="tl-cell"><div class="tl-date">17 NOV</div><div class="tl-what">High-level statements</div></div>
-          <div class="tl-cell"><div class="tl-date">18 NOV</div><div class="tl-what">Statements continue</div></div>
-        </div>
-        <div class="spacer"></div>
-        <div class="pill">LEADERS’ STATEMENTS · 17–18 NOV</div>
-      </div>
-    </div>
-
-    <!-- CARD 3 · HAITI -->
-    <div class="card">
-      <div class="chead" style="background:linear-gradient(180deg,#b0513a 0%,#9a412c 100%);">
-        <!-- original illustration: abstract rally figures, raised hands, blank sign -->
-        <svg viewBox="0 0 316 140" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- blank protest sign -->
-          <g>
-            <line x1="112" y1="112" x2="106" y2="64" stroke="#f6efdd" stroke-width="3"/>
-            <rect x="74" y="34" width="62" height="36" rx="3" fill="#f6efdd"/>
-          </g>
-          <!-- figures -->
-          <g fill="#f6efdd">
-            <!-- figure 1 -->
-            <circle cx="170" cy="70" r="7"/>
-            <path d="M160 112 c0 -14 5 -22 10 -22 c5 0 10 8 10 22 Z"/>
-            <path d="M163 96 L 156 78" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="155" cy="76" r="3.4"/>
-            <!-- figure 2 -->
-            <circle cx="208" cy="64" r="7"/>
-            <path d="M198 112 c0 -14 5 -22 10 -22 c5 0 10 8 10 22 Z"/>
-            <path d="M205 96 L 200 78" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="199" cy="76" r="3.4"/>
-            <!-- figure 3 -->
-            <circle cx="248" cy="72" r="7"/>
-            <path d="M238 112 c0 -14 5 -22 10 -22 c5 0 10 8 10 22 Z"/>
-            <path d="M253 96 L 262 78" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="263" cy="76" r="3.4"/>
-            <!-- figure 4 -->
-            <circle cx="282" cy="80" r="6.4"/>
-            <path d="M273 112 c0 -12 4.5 -19 9 -19 c4.5 0 9 7 9 19 Z"/>
-            <path d="M285 96 L 292 82" stroke="#f6efdd" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="293" cy="80" r="3"/>
-          </g>
-          <!-- ground -->
-          <rect x="0" y="126" width="316" height="14" fill="#7e3524"/>
-        </svg>
-        <div class="clabels" style="color:#fdf3ea;">
-          <span>HAITI · PORT-AU-PRINCE</span><span>REPORTED 18 NOV</span>
-        </div>
-      </div>
-      <div class="cbody">
-        <div class="ctitle serif">Thousands march for security</div>
-        <p class="ctext"><b>AFP reports</b> Tuesday’s rally backed Salvadoran anti-gang troops. The march was held on 17 Nov.</p>
-        <div class="spacer"></div>
-        <div class="pill plain">PROTEST HELD TUE · 17 NOV</div>
+      <div class="map-legend">
+        <span><b>01&#8211;03 SHENZHEN</b> &nbsp;&middot;&nbsp; 04 JAKARTA &nbsp;&middot;&nbsp; 05 ANTALYA</span>
+        <span>09 GLOBAL</span>
       </div>
     </div>
   </div>
 
-  <!-- NAVY STAT STRIP -->
-  <div class="strip">
-    <div>
-      <div class="strip-label">HAITI · UN FIGURES CITED BY AFP</div>
-      <div class="strip-title">Armed violence<br>Jan–Oct 2026</div>
+  <hr class="section-rule">
+  <div class="section-head">
+    <div class="section-title">THE WIDER FRONT PAGE &middot; 12 BRIEFINGS</div>
+    <div class="section-sub">ASIA-PACIFIC &middot; AMERICAS &middot; EUROPE &middot; CLIMATE &middot; MARKETS &middot; SECURITY</div>
+  </div>
+
+  <!-- cards -->
+  <div class="grid" id="grid"></div>
+
+  <!-- timeline -->
+  <div class="timeline">
+    <div class="tl-intro">
+      <div class="kicker">DATE LINE</div>
+      <div class="t serif">Events, not just datelines</div>
     </div>
-    <div class="stat">
-      <div class="stat-n">4,595</div>
-      <div class="stat-c">KILLED</div>
+    <div class="tl-item">
+      <div class="when">17 NOV</div>
+      <div class="what serif">Haiti march held</div>
+      <div class="note">AFP reported it 18 Nov</div>
     </div>
-    <div class="stat">
-      <div class="stat-n">2,050</div>
-      <div class="stat-c">INJURED</div>
+    <div class="tl-item">
+      <div class="when">17&#8211;18 NOV</div>
+      <div class="what serif">COP31 statements resume</div>
+      <div class="note">UNFCCC event dates</div>
     </div>
-    <div class="stat">
-      <div class="stat-n">2,000+</div>
-      <div class="stat-d">Salvadoran personnel deployed since late October, per AFP.</div>
+    <div class="tl-item">
+      <div class="when">19 NOV</div>
+      <div class="what serif">APEC trilateral meeting due</div>
+      <div class="note">Scheduled, not yet held</div>
     </div>
   </div>
 
-  <!-- FOOTER -->
-  <div class="footer">
-    <div class="foot-l">WORLD <span>/ 18 NOV 2026 · A daily news picture</span></div>
-    <div class="foot-r">
-      <span><b>Reporting:</b> Le Monde · UNFCCC · AFP / UN figures</span>
-      <span>Full source links and date notes in README</span>
-    </div>
+  <!-- footnote -->
+  <div class="foot-row">
+    <div class="foot-left">WORLD / 18 NOV 2026 <span>&middot; Daily signals, not a score forecast</span></div>
+    <div class="foot-right"><b>Date note:</b> the Java meeting was held 17 Nov, reported 18 Nov; Java and JavaScript are distinct. The $1.1tn EDC estimate is annual human-health costs alone. Full sources in README.</div>
   </div>
 
 </div>
+
+<script>
+/* Card data is authored here so the render is deterministic and offline. */
+const CARDS = [
+  {n:"02", topic:"APEC \u00b7 TRADE", color:"var(--teal)", head:"Xi urges open trade",
+   body:"At the Shenzhen CEO summit, Xi called for free and open trade and investment, and opposed protectionism.",
+   date:"18 NOV \u00b7 REMARKS", place:"SHENZHEN"},
+  {n:"03", topic:"KOREA\u2013CHINA", color:"var(--steel)", head:"Lee seeks peaceful coexistence",
+   body:"South Korea\u2019s president told Xi he hopes to work with China toward peaceful coexistence on the Korean Peninsula.",
+   date:"18 NOV \u00b7 MEETING", place:"SHENZHEN"},
+  {n:"04", topic:"ASEAN \u00b7 SOUTH CHINA SEA", color:"var(--teal)", head:"Code talks target 2027",
+   body:"ASEAN expects code-of-conduct talks to conclude next year; about 80% of the draft is settled, with sticking points to go.",
+   date:"18 NOV \u00b7 OUTLOOK", place:"JAKARTA"},
+  {n:"05", topic:"COP31 \u00b7 CLIMATE", color:"var(--sage)", head:"Leaders\u2019 statements resume",
+   body:"The high-level segment resumed 17\u201318 Nov for leaders who had not yet spoken; the first segment ran 11\u201312 Nov.",
+   date:"EVENT \u00b7 17\u201318 NOV", place:"ANTALYA"},
+  {n:"06", topic:"HAITI \u00b7 PUBLIC SAFETY", color:"var(--coral)", head:"Thousands march in support",
+   body:"Thousands rallied for Salvadoran troops on Tue 17 Nov; AFP reported it on 18 Nov. UN: 4,595 killed in Jan\u2013Oct.",
+   date:"EVENT 17 \u00b7 REPORT 18 NOV", place:"PORT-AU-PRINCE"},
+  {n:"07", topic:"EARTHQUAKE \u00b7 GFZ", color:"var(--amber)", head:"M6.0 quake strikes PNG",
+   body:"GFZ listed a magnitude 6.0 quake at 10 km depth; the report gave no casualty or damage details.",
+   date:"18 NOV \u00b7 EVENT", place:"PAPUA NEW GUINEA"},
+  {n:"08", topic:"NVIDIA \u00b7 RESULTS", color:"var(--gold)", head:"Quarterly revenue tops $115bn",
+   body:"Q3 FY2027 revenue $115.8bn, GAAP net income $65.3bn. Results were released 17 Nov; AFP reported the outlook on 18 Nov.",
+   date:"RESULTS 17 \u00b7 AFP 18 NOV", place:"SANTA CLARA, US"},
+  {n:"09", topic:"HEALTH \u00b7 ENVIRONMENT", color:"var(--green)", head:"Chemical risks in focus",
+   body:"A UNEP\u2013WHO report dated 17 Nov estimates EDC-related health costs above $1.1tn a year; evidence keeps growing.",
+   date:"REPORT 17 \u00b7 AFP 18 NOV", place:"GENEVA"},
+  {n:"10", topic:"FOOTBALL \u00b7 FIFA", color:"var(--purple)", head:"Tashima enters FIFA race",
+   body:"Japan FA honorary president Kozo Tashima said he submitted a FIFA presidency bid backed by five federations.",
+   date:"18 NOV \u00b7 BID", place:"TOKYO"},
+  {n:"11", topic:"US\u2013PHILIPPINES \u00b7 DEFENCE", color:"var(--steel)", head:"US expands PH defence ties",
+   body:"In Manila, Trump told President Marcos Jr that Washington is expanding defence cooperation with the Philippines.",
+   date:"18 NOV \u00b7 STATEMENT", place:"MANILA"},
+  {n:"12", topic:"CYBERSECURITY \u00b7 JAVA", color:"var(--amber)", head:"Seoul meets on Java risk",
+   body:"South Korea\u2019s Blue House met on 17 Nov over possible Java flaws, reported 18 Nov; Oracle shipped 11 new patches.",
+   date:"MEETING 17 \u00b7 REPORT 18 NOV", place:"SEOUL"},
+  {n:"13", topic:"EU \u00b7 RENEWABLES", color:"var(--sage)", head:"EU deal to speed permits",
+   body:"Council and Parliament provisionally agreed to speed permits for renewables, grids and storage; formal approval is still needed.",
+   date:"18 NOV \u00b7 AGREEMENT", place:"BRUSSELS"},
+];
+const grid = document.getElementById("grid");
+for (const c of CARDS) {
+  const el = document.createElement("div");
+  el.className = "card";
+  el.innerHTML =
+    '<div class="toprule" style="background:' + c.color + '"></div>' +
+    '<div class="label-row"><div class="label">' + c.topic + '</div>' +
+    '<div class="num">' + c.n + '</div></div>' +
+    '<h3 class="serif">' + c.head + '</h3>' +
+    '<p>' + c.body + '</p>' +
+    '<div class="foot"><span>' + c.date + '</span><span class="place" style="color:' + c.color + '">' + c.place + '</span></div>';
+  grid.appendChild(el);
+}
+</script>
 </body>
 </html>
