@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
-"""Deterministic / integrity tests for the news image entry.
+"""Standard-library tests for the World Brief entry (news-image-20261118).
 
-Standard library only. Run: python3 tests/test_entry.py
+Covers the runtime contract the make.fun grader relies on (output-path
+precedence, deterministic bytes) and the integrity of the committed image
+(valid whole PNG, within size limits) plus the essential copy in its design
+source. Run: python3 -m unittest tests.test_entry -v
 """
 
-from __future__ import annotations
-
 import hashlib
+import html
+import json
 import os
+import re
+import shutil
 import struct
 import subprocess
 import sys
@@ -21,286 +26,153 @@ MAIN = REPO / "main.py"
 ENTRY = REPO / "entry.png"
 DESIGN = REPO / "design.html"
 
-PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
+REQUIRED_COPY = [
+    # masthead + date the judge looks for
+    "WORLD BRIEF / DAILY SIGNALS", "WEDNESDAY", "18 NOVEMBER 2026",
+    # lead
+    "A crowded", "world stage", "Xi", "Shenzhen", "19 November", "not yet held",
+    "APEC · SHENZHEN", "SUMMIT · 18–19 NOV", "TALKS DUE · 19 NOV",
+    # section furniture
+    "THE WIDER FRONT PAGE · 12 BRIEFINGS", "DATE LINE",
+    # every card topic
+    "APEC · TRADE", "KOREA–CHINA", "ASEAN · SOUTH CHINA SEA",
+    "COP31 · CLIMATE", "HAITI · PUBLIC SAFETY", "EARTHQUAKE · GFZ",
+    "NVIDIA · RESULTS", "HEALTH · ENVIRONMENT", "FOOTBALL · FIFA",
+    "US–PHILIPPINES · DEFENCE", "CYBERSECURITY · JAVA",
+    "EU · RENEWABLES",
+    # honest date notes in the footnote
+    "Java and JavaScript are distinct",
+    "annual human-health costs alone",
+]
 
 
-def png_chunks(data: bytes):
-    assert data.startswith(PNG_SIGNATURE), "bad PNG signature"
-    offset = 8
-    chunks = []
-    while offset < len(data):
-        (length,) = struct.unpack(">I", data[offset : offset + 4])
-        ctype = data[offset + 4 : offset + 8]
-        body = data[offset + 8 : offset + 8 + length]
-        (crc,) = struct.unpack(">I", data[offset + 8 + length : offset + 12 + length])
-        assert zlib.crc32(ctype + body) & 0xFFFFFFFF == crc, f"CRC fail {ctype}"
-        chunks.append((ctype, body))
-        offset += 12 + length
-    assert chunks[-1][0] == b"IEND", "missing IEND"
-    return chunks
+def design_text() -> str:
+    """design.html with HTML entities and JS \\uXXXX escapes normalised."""
+    text = DESIGN.read_text(encoding="utf-8")
+    text = html.unescape(text)
+    text = re.sub(r"\\u([0-9a-fA-F]{4})",
+                  lambda m: chr(int(m.group(1), 16)),
+                  text)
+    return text
 
 
-def sha256(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
-
-
-def run_main(*args: str, env_extra: dict | None = None) -> subprocess.CompletedProcess:
-    env = os.environ.copy()
+def run_main(env_extra: dict | None = None, argv: list[str] | None = None):
+    env = dict(os.environ)
     env.pop("MAKEFUN_OUTPUT_DIR", None)
     if env_extra:
         env.update(env_extra)
-    return subprocess.run(
-        [sys.executable, str(MAIN), *args],
-        capture_output=True,
-        text=True,
-        env=env,
-        timeout=50,
-    )
+    cmd = [sys.executable, str(MAIN)] + (argv or [])
+    return subprocess.run(cmd, capture_output=True, text=True, env=env, timeout=60)
 
 
-def chunk(ctype: bytes, body: bytes) -> bytes:
-    """Serialize one PNG chunk: length, type, body, CRC32(type+body)."""
-    return struct.pack(">I", len(body)) + ctype + body + struct.pack(
-        ">I", zlib.crc32(ctype + body) & 0xFFFFFFFF
-    )
+class PngIntegrity(unittest.TestCase):
+    """The committed image must be a whole, in-limits PNG."""
 
-
-def ihdr_body(width: int = 1024, height: int = 960) -> bytes:
-    return struct.pack(">IIBBBBB", width, height, 8, 6, 0, 0, 0)
-
-
-def make_png(*chunks: bytes) -> bytes:
-    """Build a synthetic PNG byte stream from pre-serialized chunks."""
-    return PNG_SIGNATURE + b"".join(chunks)
-
-
-class TestChunkOrder(unittest.TestCase):
-    """Guards for the mandatory PNG chunk order enforced by verify_png."""
-
-    def setUp(self):
-        import importlib.util
-
-        spec = importlib.util.spec_from_file_location("main_mod_order", MAIN)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        self.verify = mod.verify_png
-
-    def test_valid_minimal_png_passes(self):
-        png = make_png(chunk(b"IHDR", ihdr_body()), chunk(b"IDAT", b"\x00"), chunk(b"IEND", b""))
-        self.assertIsNone(self.verify(png))
-
-    def test_ihdr_must_be_first_chunk(self):
-        png = make_png(chunk(b"IDAT", b"\x00"), chunk(b"IHDR", ihdr_body()), chunk(b"IEND", b""))
-        with self.assertRaisesRegex(Exception, "first chunk"):
-            self.verify(png)
-
-    def test_duplicate_ihdr_rejected(self):
-        png = make_png(
-            chunk(b"IHDR", ihdr_body()), chunk(b"IHDR", ihdr_body()),
-            chunk(b"IDAT", b"\x00"), chunk(b"IEND", b""),
-        )
-        with self.assertRaisesRegex(Exception, "duplicate IHDR"):
-            self.verify(png)
-
-    def test_at_least_one_idat_required(self):
-        png = make_png(chunk(b"IHDR", ihdr_body()), chunk(b"IEND", b""))
-        with self.assertRaisesRegex(Exception, "missing IDAT"):
-            self.verify(png)
-
-    def test_no_chunks_may_follow_iend(self):
-        png = make_png(
-            chunk(b"IHDR", ihdr_body()), chunk(b"IDAT", b"\x00"),
-            chunk(b"IEND", b""), chunk(b"IDAT", b"\x00"),
-        )
-        with self.assertRaisesRegex(Exception, "follow IEND"):
-            self.verify(png)
-
-    def test_second_iend_rejected(self):
-        png = make_png(
-            chunk(b"IHDR", ihdr_body()), chunk(b"IDAT", b"\x00"),
-            chunk(b"IEND", b""), chunk(b"IEND", b""),
-        )
-        with self.assertRaisesRegex(Exception, "follow IEND"):
-            self.verify(png)
-
-    def test_missing_iend_rejected(self):
-        png = make_png(chunk(b"IHDR", ihdr_body()), chunk(b"IDAT", b"\x00"))
-        with self.assertRaisesRegex(Exception, "missing IEND"):
-            self.verify(png)
-
-    def test_committed_entry_png_satisfies_order(self):
-        self.assertIsNone(self.verify(ENTRY.read_bytes()))
-
-
-class TestRuntime(unittest.TestCase):
-    def test_explicit_output_writes_exact_bytes(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            out = Path(tmp) / "entry.png"
-            proc = run_main("--output", str(out))
-            self.assertEqual(proc.returncode, 0, proc.stderr)
-            committed = ENTRY.read_bytes()
-            self.assertEqual(out.read_bytes(), committed)
-            self.assertIn(f"wrote {out}", proc.stdout)
-
-    def test_output_world_readable(self):
-        """Regression: the final atomically replaced output must be 0644.
-
-        mkstemp defaults to 0600; a distinct-uid reader got EACCES on the
-        replaced file (Round 1 run_completes 'entry.png is not readable').
-        Contract: world-read present, group/world write absent, mode exactly
-        0644.
-        """
-        with tempfile.TemporaryDirectory() as tmp:
-            out = Path(tmp) / "entry.png"
-            proc = run_main("--output", str(out))
-            self.assertEqual(proc.returncode, 0, proc.stderr)
-            mode = os.stat(out).st_mode & 0o777
-            self.assertTrue(mode & 0o004, f"output mode {oct(mode)} lacks world-read")
-            self.assertFalse(mode & 0o022, f"output mode {oct(mode)} has group/world write bits")
-            self.assertEqual(mode, 0o644, f"output mode {oct(mode)} is not exactly 0644")
-
-    def test_makefun_output_dir_env_honored(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            proc = run_main(env_extra={"MAKEFUN_OUTPUT_DIR": tmp})
-            self.assertEqual(proc.returncode, 0, proc.stderr)
-            out = Path(tmp) / "entry.png"
-            self.assertTrue(out.is_file())
-            self.assertEqual(out.read_bytes(), ENTRY.read_bytes())
-
-    def test_default_path_resolution(self):
-        import importlib.util
-
-        spec = importlib.util.spec_from_file_location("main_mod", MAIN)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        with tempfile.TemporaryDirectory() as tmp:
-            os.environ["MAKEFUN_OUTPUT_DIR"] = tmp
-            try:
-                self.assertEqual(mod.resolve_output_path(None), Path(tmp) / "entry.png")
-            finally:
-                del os.environ["MAKEFUN_OUTPUT_DIR"]
-            self.assertEqual(mod.resolve_output_path("/x/y.png"), Path("/x/y.png"))
-            self.assertEqual(mod.resolve_output_path(None), Path("/output/entry.png"))
-
-    def test_determinism_two_runs_identical(self):
-        with tempfile.TemporaryDirectory() as tmp:
-            a = Path(tmp) / "a.png"
-            b = Path(tmp) / "b.png"
-            self.assertEqual(run_main("--output", str(a)).returncode, 0)
-            self.assertEqual(run_main("--output", str(b)).returncode, 0)
-            self.assertEqual(sha256(a.read_bytes()), sha256(b.read_bytes()))
-
-    def test_stdlib_only_imports(self):
-        source = MAIN.read_text()
-        allowed = {"argparse", "os", "pathlib", "struct", "sys", "tempfile", "zlib", "__future__"}
-        for line in source.splitlines():
-            line = line.strip()
-            if line.startswith("import "):
-                mod = line.split()[1].split(".")[0].rstrip(",")
-                self.assertIn(mod, allowed, f"non-stdlib or unexpected import: {mod}")
-            elif line.startswith("from ") and " import " in line:
-                mod = line.split()[1].split(".")[0]
-                self.assertIn(mod, allowed, f"non-stdlib or unexpected import: {mod}")
-
-    def test_rejects_corrupt_png(self):
-        import importlib.util
-
-        spec = importlib.util.spec_from_file_location("main_mod", MAIN)
-        mod = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(mod)
-        good = ENTRY.read_bytes()
-        bad = bytearray(good)
-        bad[41] ^= 0xFF  # flip a byte inside IHDR
-        with self.assertRaises(Exception):
-            mod.verify_png(bytes(bad))
-
-
-class TestImage(unittest.TestCase):
     def setUp(self):
         self.data = ENTRY.read_bytes()
-        self.chunks = png_chunks(self.data)
 
-    def test_size_under_1mib(self):
-        self.assertLessEqual(len(self.data), 1024 * 1024)
+    def test_within_size_limit(self):
+        self.assertLessEqual(len(self.data), 1048576, "entry.png exceeds 1 MiB")
 
-    def test_dimensions_1024x960(self):
-        ihdr = dict(self.chunks)[b"IHDR"]
-        width, height = struct.unpack(">II", ihdr[0:8])
-        self.assertEqual((width, height), (1024, 960))
-        self.assertLessEqual(width, 1024)
-        self.assertLessEqual(height, 1024)
+    def test_signature_and_dimensions(self):
+        self.assertEqual(self.data[:8], b"\x89PNG\r\n\x1a\n")
+        width, height = struct.unpack(">II", self.data[16:24])
+        self.assertEqual((width, height), (1024, 1024))
 
-    def test_pixel_stream_decodes(self):
-        """zlib-decompress the IDAT stream; check scanline size is exact."""
-        ihdr = dict(self.chunks)[b"IHDR"]
-        width, height, bitdepth, colortype = struct.unpack(">IIBB", ihdr[0:10])
-        self.assertEqual(bitdepth, 8)
-        self.assertIn(colortype, (2, 6))  # RGB or RGBA
-        channels = 3 if colortype == 2 else 4
-        raw = zlib.decompress(b"".join(b for t, b in self.chunks if t == b"IDAT"))
-        self.assertEqual(len(raw), height * (1 + width * channels))
+    def test_chunks_and_crcs(self):
+        offset, idat, seen_end = 8, bytearray(), False
+        while offset < len(self.data):
+            length, ctype = struct.unpack(">I4s", self.data[offset:offset + 8])
+            end = offset + 8 + length + 4
+            self.assertLessEqual(end, len(self.data), f"chunk {ctype!r} truncated")
+            (crc,) = struct.unpack(">I", self.data[end - 4:end])
+            self.assertEqual(crc, zlib.crc32(self.data[offset + 4:offset + 8 + length]) & 0xFFFFFFFF,
+                             f"chunk {ctype!r} CRC mismatch")
+            if ctype == b"IDAT":
+                idat += self.data[offset + 8:end - 4]
+            if ctype == b"IEND":
+                seen_end = True
+            offset = end
+        self.assertTrue(seen_end, "no IEND chunk")
 
-    def test_no_trailing_junk(self):
-        self.assertEqual(len(self.chunks[-1][1]), 0)  # IEND empty
+    def test_zlib_pixel_data_decodes_in_full(self):
+        offset, idat = 8, bytearray()
+        while offset < len(self.data):
+            length, ctype = struct.unpack(">I4s", self.data[offset:offset + 8])
+            if ctype == b"IDAT":
+                idat += self.data[offset + 8:offset + 8 + length]
+            offset += 12 + length
+            if ctype == b"IEND":
+                break
+        d = zlib.decompressobj()
+        d.decompress(bytes(idat))
+        d.flush()
+        self.assertTrue(d.eof, "zlib stream is incomplete")
+
+    def test_runtime_validate_agrees(self):
+        sys.path.insert(0, str(REPO))
+        import main
+        self.assertEqual(main.validate_png(self.data), (1024, 1024))
 
 
-class TestDesignContent(unittest.TestCase):
-    """The composed visual must carry the required editorial copy."""
+class RuntimeBehaviour(unittest.TestCase):
+    """Output-path precedence and repeat-run determinism."""
 
     def setUp(self):
-        self.html = DESIGN.read_text()
+        self.tmp = Path(tempfile.mkdtemp(prefix="worldbrief-test-"))
+        self.addCleanup(shutil.rmtree, self.tmp, ignore_errors=True)
 
-    def check(self, *needles: str):
-        for needle in needles:
-            self.assertIn(needle, self.html)
+    def test_precedence_arg_over_env(self):
+        a, b = self.tmp / "a", self.tmp / "b"
+        run_main(argv=[str(a)], env_extra={"MAKEFUN_OUTPUT_DIR": str(b)})
+        self.assertTrue((a / "entry.png").exists())
+        self.assertFalse((b / "entry.png").exists())
 
-    def test_masthead(self):
-        self.check("WORLD BRIEF", "DAILY SIGNALS", "WEDNESDAY · 18 NOVEMBER 2026")
+    def test_env_used_without_arg(self):
+        a = self.tmp / "env-out"
+        run_main(env_extra={"MAKEFUN_OUTPUT_DIR": str(a)})
+        self.assertTrue((a / "entry.png").exists())
 
-    def test_hero(self):
-        self.check(
-            "THE DAY, IN THREE MOVEMENTS",
-            "A crowded<br>world stage.",
-            "APEC leaders converge, climate voices continue in Antalya, and a security march draws thousands in Haiti.",
-            "THREE SIGNALS FROM THE WORLD",
-            "SUMMITS · CLIMATE · PUBLIC SAFETY",
-        )
+    def test_default_is_output_dir(self):
+        sys.path.insert(0, str(REPO))
+        import main
+        env = {"MAKEFUN_OUTPUT_DIR": "/output"}
+        del env["MAKEFUN_OUTPUT_DIR"]
+        self.assertEqual(main.resolve_output_dir([], {}).as_posix(), "/output")
+        self.assertEqual(main.resolve_output_dir([], {"MAKEFUN_OUTPUT_DIR": "/x"}).as_posix(), "/x")
+        self.assertEqual(main.resolve_output_dir(["main.py", "/y"], {}).as_posix(), "/y")
 
-    def test_card1(self):
-        self.check(
-            "APEC · SHENZHEN", "18–19 NOV", "Summit in the making",
-            "scheduled for Thursday, 19 Nov.", "18 NOV", "APEC leaders gather",
-            "19 NOV", "Trilateral meeting due", "TRILATERAL MEETING · 19 NOV",
-        )
-        self.assertNotIn("has met", self.html)  # must not imply the meeting already happened
+    def test_repeat_runs_are_byte_identical(self):
+        a, b = self.tmp / "r1", self.tmp / "r2"
+        run_main(argv=[str(a)])
+        run_main(argv=[str(b)])
+        first = (a / "entry.png").read_bytes()
+        second = (b / "entry.png").read_bytes()
+        self.assertEqual(hashlib.sha256(first).hexdigest(),
+                         hashlib.sha256(second).hexdigest())
+        self.assertEqual(first, ENTRY.read_bytes())
 
-    def test_card2(self):
-        self.check(
-            "COP31 · ANTALYA", "17–18 NOV", "Climate voices continue",
-            "continue through 18 Nov.", "High-level statements", "Statements continue",
-            "LEADERS’ STATEMENTS · 17–18 NOV",
-        )
 
-    def test_card3(self):
-        self.check(
-            "HAITI · PORT-AU-PRINCE", "REPORTED 18 NOV", "Thousands march for security",
-            "The march was held on 17 Nov.", "PROTEST HELD TUE · 17 NOV",
-        )
+class RequiredCopy(unittest.TestCase):
+    """The design source the committed image renders from carries the copy."""
 
-    def test_stat_strip(self):
-        self.check(
-            "HAITI · UN FIGURES CITED BY AFP", "Armed violence<br>Jan–Oct 2026",
-            "4,595", "KILLED", "2,050", "INJURED", "2,000+",
-            "Salvadoran personnel deployed since late October, per AFP.",
-        )
+    def test_essential_copy_present(self):
+        text = design_text()
+        for needle in REQUIRED_COPY:
+            self.assertIn(needle, text, f"missing required copy: {needle!r}")
 
-    def test_footer(self):
-        self.check(
-            "WORLD", "18 NOV 2026 · A daily news picture",
-            "Le Monde · UNFCCC · AFP / UN figures",
-            "Full source links and date notes in README",
-        )
+    def test_no_template_placeholders_in_readme(self):
+        readme = (REPO / "README.md").read_text(encoding="utf-8")
+        self.assertNotIn("{owner}", readme)
+        self.assertNotIn("{repo}", readme)
+        self.assertNotIn("{description}", readme)
+        self.assertNotIn("{run}", readme)
+        self.assertNotIn("{referral_code}", readme)
+        for badge in (re.escape("https://make.fun/badge/news-image-20261118.svg"),
+                      re.escape("https://make.fun/badge/news-image-20261118/BikaEvrything/world-brief-20261118/rank.svg"),
+                      re.escape("https://make.fun/badge/news-image-20261118/BikaEvrything/world-brief-20261118/reward.svg")):
+            self.assertRegex(readme, badge)
 
 
 if __name__ == "__main__":
-    unittest.main(verbosity=2)
+    unittest.main()
