@@ -142,6 +142,23 @@ class TestRuntime(unittest.TestCase):
             self.assertEqual(out.read_bytes(), committed)
             self.assertIn(f"wrote {out}", proc.stdout)
 
+    def test_output_world_readable(self):
+        """Regression: the final atomically replaced output must be 0644.
+
+        mkstemp defaults to 0600; a distinct-uid reader got EACCES on the
+        replaced file (Round 1 run_completes 'entry.png is not readable').
+        Contract: world-read present, group/world write absent, mode exactly
+        0644.
+        """
+        with tempfile.TemporaryDirectory() as tmp:
+            out = Path(tmp) / "entry.png"
+            proc = run_main("--output", str(out))
+            self.assertEqual(proc.returncode, 0, proc.stderr)
+            mode = os.stat(out).st_mode & 0o777
+            self.assertTrue(mode & 0o004, f"output mode {oct(mode)} lacks world-read")
+            self.assertFalse(mode & 0o022, f"output mode {oct(mode)} has group/world write bits")
+            self.assertEqual(mode, 0o644, f"output mode {oct(mode)} is not exactly 0644")
+
     def test_makefun_output_dir_env_honored(self):
         with tempfile.TemporaryDirectory() as tmp:
             proc = run_main(env_extra={"MAKEFUN_OUTPUT_DIR": tmp})
